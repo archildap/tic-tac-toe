@@ -53,6 +53,31 @@ const GameController = (() => {
                 } else { document.querySelector('.result').textContent = `${players[1].name} Won Congratulations!`; }
             }
         }
+        for (let i = 0; i < 3; i += 2) {
+            if (gameboard[i] === gameboard[i + 4] && gameboard[i] === gameboard[i + 8] && gameboard[i] !== '') {
+                gameOver = true;
+                document.querySelector('.turn').textContent = 'Game Over';
+                if (gameboard[i] === players[0].mark) {
+                    document.querySelector('.result').textContent = `${players[0].name} Won Congratulations!`;
+                } else { document.querySelector('.result').textContent = `${players[1].name} Won Congratulations!`; }
+            }
+        }
+        for (let i = 2; i < 3; i++) {
+            if (gameboard[i] === gameboard[i + 2] && gameboard[i] === gameboard[i + 4] && gameboard[i] !== '') {
+                gameOver = true;
+                document.querySelector('.turn').textContent = 'Game Over';
+                if (gameboard[i] === players[0].mark) {
+                    document.querySelector('.result').textContent = `${players[0].name} Won Congratulations!`;
+                } else { document.querySelector('.result').textContent = `${players[1].name} Won Congratulations!`; }
+            } else {
+                const emptyCells = gameboard.filter((cell) => (cell === ''));
+                if (emptyCells.length < 1) {
+                    gameOver = true;
+                    document.querySelector('.turn').textContent = 'Game Over';
+                    document.querySelector('.result').textContent = 'DRAW!';
+                }
+            }
+        }
     };
 
     const switchPlayerTurn = () => {
@@ -60,13 +85,16 @@ const GameController = (() => {
     };
 
     const start = () => {
-        document.querySelector('.startBtn').disabled = true;
+        document.querySelector('.restart-btn').style.display = 'block';
+        document.querySelector('.start-btn').style.display = 'none';
         players = [
-            createPlayer('Player One', 'X'),
-            createPlayer('Player Two', 'O'),
+            createPlayer('Player 1', 'X'),
+            createPlayer('Player 2', 'O'),
         ];
         currentPlayer = players[0];
         document.querySelector('.turn').textContent = `${currentPlayer.name}'s turn`;
+        gameOver = false;
+        document.querySelector('.result').textContent = '';
         Gameboard.render();
     };
 
@@ -81,9 +109,18 @@ const GameController = (() => {
         isGameOver();
     };
 
-    return { start, handleClick };
+    const handleRestart = () => {
+        Gameboard.gameboard.map((cell, index) => {
+            Gameboard.gameboard[index] = '';
+        });
+        start();
+    };
+
+    return { start, handleClick, handleRestart };
 })();
 
-const startBtn = document.querySelector('.startBtn');
+const restartBtn = document.querySelector('.restart-btn');
+const startBtn = document.querySelector('.start-btn');
 
 startBtn.addEventListener('click', GameController.start);
+restartBtn.addEventListener('click', GameController.handleRestart);
