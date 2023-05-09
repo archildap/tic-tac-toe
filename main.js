@@ -28,6 +28,10 @@ const createPlayer = (name, mark) => ({
 });
 
 const GameController = (() => {
+    const nameSubmit = document.querySelector('.form-submit');
+    const player1 = document.getElementById('player1');
+    const player2 = document.getElementById('player2');
+
     let players = [];
 
     let currentPlayer;
@@ -40,8 +44,8 @@ const GameController = (() => {
                 gameOver = true;
                 document.querySelector('.turn').textContent = 'Game Over';
                 if (gameboard[i] === players[0].mark) {
-                    document.querySelector('.result').textContent = `${players[0].name} Won Congratulations!`;
-                } else { document.querySelector('.result').textContent = `${players[1].name} Won Congratulations!`; }
+                    document.querySelector('.result').textContent = `${players[0].name} WON THE GAME!`;
+                } else { document.querySelector('.result').textContent = `${players[1].name} WON THE GAME!`; }
             }
         }
         for (let i = 0; i < 3; i++) {
@@ -49,8 +53,8 @@ const GameController = (() => {
                 gameOver = true;
                 document.querySelector('.turn').textContent = 'Game Over';
                 if (gameboard[i] === players[0].mark) {
-                    document.querySelector('.result').textContent = `${players[0].name} Won Congratulations!`;
-                } else { document.querySelector('.result').textContent = `${players[1].name} Won Congratulations!`; }
+                    document.querySelector('.result').textContent = `${players[0].name} WON THE GAME!`;
+                } else { document.querySelector('.result').textContent = `${players[1].name} WON THE GAME!`; }
             }
         }
         for (let i = 0; i < 3; i += 2) {
@@ -58,8 +62,8 @@ const GameController = (() => {
                 gameOver = true;
                 document.querySelector('.turn').textContent = 'Game Over';
                 if (gameboard[i] === players[0].mark) {
-                    document.querySelector('.result').textContent = `${players[0].name} Won Congratulations!`;
-                } else { document.querySelector('.result').textContent = `${players[1].name} Won Congratulations!`; }
+                    document.querySelector('.result').textContent = `${players[0].name} WON THE GAME!`;
+                } else { document.querySelector('.result').textContent = `${players[1].name} WON THE GAME!`; }
             }
         }
         for (let i = 2; i < 3; i++) {
@@ -67,8 +71,8 @@ const GameController = (() => {
                 gameOver = true;
                 document.querySelector('.turn').textContent = 'Game Over';
                 if (gameboard[i] === players[0].mark) {
-                    document.querySelector('.result').textContent = `${players[0].name} Won Congratulations!`;
-                } else { document.querySelector('.result').textContent = `${players[1].name} Won Congratulations!`; }
+                    document.querySelector('.result').textContent = `${players[0].name} WON THE GAME!`;
+                } else { document.querySelector('.result').textContent = `${players[1].name} WON THE GAME!`; }
             } else {
                 const emptyCells = gameboard.filter((cell) => (cell === ''));
                 if (emptyCells.length < 1) {
@@ -84,13 +88,24 @@ const GameController = (() => {
         currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
     };
 
+    const handleNameSubmit = (event) => {
+        event.preventDefault();
+        if (player1.value !== '' && player2.value !== '') {
+            document.querySelector('.start-btn').style.display = 'block';
+            players = [
+                createPlayer(player1.value, 'X'),
+                createPlayer(player2.value, 'O'),
+            ];
+            document.getElementById('name-input').style.display = 'none';
+        } else {
+            document.querySelector('.input-title').textContent = 'You have not entered names!';
+        }
+    };
+    nameSubmit.addEventListener('click', handleNameSubmit);
+
     const start = () => {
         document.querySelector('.restart-btn').style.display = 'block';
         document.querySelector('.start-btn').style.display = 'none';
-        players = [
-            createPlayer('Player 1', 'X'),
-            createPlayer('Player 2', 'O'),
-        ];
         currentPlayer = players[0];
         document.querySelector('.turn').textContent = `${currentPlayer.name}'s turn`;
         gameOver = false;
